@@ -1,6 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+
+const HASH_TYPE = 'argon2id';
 
 @Injectable()
 export class AuthService {
@@ -10,14 +12,14 @@ export class AuthService {
   ) { }
 
   async signIn(
-    username: string,
+    email: string,
     pass: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(username);
-    if (Bun.password.verify(pass, user?.password, 'argon2id')) {
+    const user = await this.usersService.findOne(email);
+    if (!await Bun.password.verify(pass, user?.password, HASH_TYPE)) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName };
     return {
       access_token: await this.jwtService.signAsync(payload)
     };
@@ -29,10 +31,16 @@ export class AuthService {
     email: string,
     pass: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.usersService.create(firstName, lastName, email, pass);
-    const payload = { sub: user.id, email: user.email };
-    return {
-      access_token: await this.jwtService.signAsync(payload)
-    };
+    try {
+      const hashedPass = await Bun.password.hash(pass, HASH_TYPE);
+      const user = await this.usersService.create(firstName, lastName, email, hashedPass);
+      const payload = { sub: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName };
+      return {
+        access_token: await this.jwtService.signAsync(payload)
+      };
+    }
+    catch(error) {
+      throw new UnprocessableEntityException(error.code);
+    }
   }
 }

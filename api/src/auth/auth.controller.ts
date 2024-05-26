@@ -9,7 +9,8 @@ import {
   } from '@nestjs/common';
   import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/isPublic.decorator';
-import { User } from 'src/users/user.entity';
+import { LoginUserDto } from 'src/users/loginUserDto';
+import { CreateUserDto } from 'src/users/createUserDto';
   
   @Controller('auth')
   export class AuthController {
@@ -18,14 +19,14 @@ import { User } from 'src/users/user.entity';
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @Public()
-    signIn(@Body() signInDto: Omit<User, 'id' | 'firstName' | 'lastName'>) {
+    signIn(@Body() signInDto: LoginUserDto) {
       return this.authService.signIn(signInDto.email, signInDto.password);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
     @Public()
-    register(@Body() registerDto: Omit<User, 'id'>) {
+    register(@Body() registerDto: CreateUserDto) {
       return this.authService.register(registerDto.firstName, registerDto.lastName, registerDto.email, registerDto.password);
     }
   
