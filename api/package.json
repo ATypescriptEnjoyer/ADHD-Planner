@@ -18,11 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    
     "migration:up": "typeorm migration:run -d src/config/migration.config.ts",
-    "migration:create": "typeorm migration:create",
+    "migration:create": "sh -c 'typeorm migration:create migrations/$0'",
     "migration:down": "typeorm migration:revert -d src/config/migration.config.ts",
-    "migration:gen": "typeorm migration:generate -d src/config/migration.config.ts",
+    "migration:gen": "sh -c 'typeorm migration:generate -d src/config/migration.config.ts migrations/$0'",
     "migration:up:prod": "typeorm migration:run -d /app/dist/api/src/config/migration.config.js"
   },
   "dependencies": {
@@ -37,10 +36,10 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.2",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@types/bun": "^1.1.2",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
@@ -56,7 +55,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },

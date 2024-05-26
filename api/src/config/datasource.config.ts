@@ -1,9 +1,12 @@
 import { DataSourceOptions } from 'typeorm';
 
 
-const { MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, DB_HOST} = Bun.env;
+const { MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, DB_HOST} = process.env;
 
-export function getConfig() {
+const migPath = 'dist/migrations/*.{ts,js}'
+const entPath = 'dist/**/*.entity.{ts,js}'
+
+export const getConfig = (): DataSourceOptions => {
     return {
         type: 'mariadb',
         host: DB_HOST,
@@ -12,7 +15,7 @@ export function getConfig() {
         password: MYSQL_PASSWORD,
         database: MYSQL_DATABASE,
         synchronize: false,
-        migrations: [__dirname + '/../../migrations/*.{ts,js}'],
-        entities: [__dirname + '/../../**/*.entity.{ts,js}'],
-    } as DataSourceOptions
+        migrations: [migPath],
+        entities: [entPath],
+    }
 }
