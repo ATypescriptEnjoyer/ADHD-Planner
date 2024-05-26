@@ -17,5 +17,13 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "exclude": [
+    "plop-templates/**",
+    "./dist/**"
+  ],
+  "include": [
+    "src",
+    "migrations"
+  ]
 }

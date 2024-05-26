@@ -22,6 +22,13 @@ import { Public } from 'src/decorators/isPublic.decorator';
     signIn(@Body() signInDto: Record<string, any>) {
       return this.authService.signIn(signInDto.username, signInDto.password);
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('register')
+    @Public()
+    register(@Body() registerDto: Record<string, any>) {
+      return this.authService.signIn(registerDto.username, registerDto.password);
+    }
   
     @UseGuards(AuthGuard)
     @Get('profile')
