@@ -5,12 +5,11 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    Request,
-    UseGuards
+    Request
   } from '@nestjs/common';
-  import { AuthGuard } from './auth.guard';
   import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/isPublic.decorator';
+import { User } from 'src/users/user.entity';
   
   @Controller('auth')
   export class AuthController {
@@ -19,18 +18,17 @@ import { Public } from 'src/decorators/isPublic.decorator';
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @Public()
-    signIn(@Body() signInDto: Record<string, any>) {
-      return this.authService.signIn(signInDto.username, signInDto.password);
+    signIn(@Body() signInDto: Omit<User, 'id' | 'firstName' | 'lastName'>) {
+      return this.authService.signIn(signInDto.email, signInDto.password);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
     @Public()
-    register(@Body() registerDto: Record<string, any>) {
-      return this.authService.signIn(registerDto.username, registerDto.password);
+    register(@Body() registerDto: Omit<User, 'id'>) {
+      return this.authService.register(registerDto.firstName, registerDto.lastName, registerDto.email, registerDto.password);
     }
   
-    @UseGuards(AuthGuard)
     @Get('profile')
     getProfile(@Request() req) {
       return req.user;

@@ -7,11 +7,14 @@ export class User {
   id: number;
 
   @Column("varchar")
-  username: string;
+  firstName: string;
+
+  @Column("varchar")
+  lastName: string;
+
+  @Column("varchar", {unique: true})
+  email: string;
 
   @Column("varchar")
   password: string;
-
-  @Column({ default: true, type: 'boolean' })
-  isActive: boolean;
 }

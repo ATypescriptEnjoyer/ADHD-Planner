@@ -14,12 +14,12 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne = (username: string): Promise<User | null> => {
-    return this.usersRepository.findOneBy({ username });
+  findOne = (email: string): Promise<User | null> => {
+    return this.usersRepository.findOneBy({ email });
   }
 
-  create = async (username: string, password: string): Promise<User | null> => {
-    return this.usersRepository.create({ username, password });
+  create = async (firstName: string, lastName: string, email: string, password: string): Promise<User | null> => {
+    return this.usersRepository.create({ firstName, lastName, email, password });
   }
 
   remove = async (id: number): Promise<void> => {

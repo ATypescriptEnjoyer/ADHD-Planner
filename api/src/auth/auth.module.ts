@@ -19,10 +19,6 @@ const { JWT_SECRET } = Bun.env;
   ],
   providers: [
     AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
   controllers: [AuthController],
   exports: [AuthService],
